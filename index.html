@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>食物熱量計算器</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.10.0/dist/tf.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet@2.1.0" defer></script>
+    <script type="module" src="app.js" defer></script>
+  </head>
+  <body>
+    <header>
+      <h1>食物熱量與營養計算器</h1>
+      <p>
+        上傳或拍攝食物照片，系統會使用機器學習模型推論食物種類並提供建議的熱量、蛋白質、脂肪及碳水化合物等資訊。若辨識結果不正確，亦可手動選擇食物並調整份量。
+      </p>
+    </header>
+
+    <main>
+      <section class="upload-card">
+        <h2>上傳食物照片</h2>
+        <div class="upload-area" id="drop-zone">
+          <input
+            type="file"
+            accept="image/*"
+            capture="environment"
+            id="image-input"
+            aria-label="選擇或拍攝食物照片"
+          />
+          <label for="image-input" class="upload-label">
+            <span class="upload-icon">📷</span>
+            <span class="upload-text">點擊或拖曳照片到此處</span>
+            <span class="upload-hint">支援即時拍攝及圖片上傳</span>
+          </label>
+        </div>
+        <p id="status" class="status">尚未上傳照片</p>
+        <div class="preview" id="preview">
+          <img id="preview-image" alt="食物預覽圖" />
+        </div>
+      </section>
+
+      <section class="results-card" aria-live="polite">
+        <h2>辨識結果</h2>
+        <div id="predictions" class="predictions"></div>
+
+        <div class="manual-selection">
+          <label for="manual-select">若辨識不符，請手動選擇：</label>
+          <select id="manual-select">
+            <option value="">-- 選擇食物 --</option>
+          </select>
+        </div>
+
+        <div id="nutrition" class="nutrition" hidden>
+          <div class="nutrition-header">
+            <div>
+              <h3 id="food-name"></h3>
+              <p id="food-serving"></p>
+            </div>
+            <div class="confidence" id="confidence" aria-live="polite"></div>
+          </div>
+
+          <div class="portion-control">
+            <label for="portion-input">調整份量 (克)：</label>
+            <input
+              type="number"
+              id="portion-input"
+              min="1"
+              step="1"
+              value="100"
+            />
+          </div>
+
+          <table class="nutrition-table">
+            <thead>
+              <tr>
+                <th>項目</th>
+                <th>含量</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>熱量</td>
+                <td id="calories-cell"></td>
+              </tr>
+              <tr>
+                <td>蛋白質</td>
+                <td id="protein-cell"></td>
+              </tr>
+              <tr>
+                <td>脂肪</td>
+                <td id="fat-cell"></td>
+              </tr>
+              <tr>
+                <td>碳水化合物</td>
+                <td id="carbs-cell"></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <p>
+        ⚠️ 本系統提供之營養資料僅供參考，如需精準飲食規劃請諮詢營養師或醫療人員。
+      </p>
+    </footer>
+  </body>
+</html>
